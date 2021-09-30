@@ -1,5 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const path = require("path");
+const Path = require("path");
+const { ProvidePlugin } = require("webpack");
 
 module.exports = {
   transpileDependencies: true,
@@ -7,10 +8,19 @@ module.exports = {
     "style-resources-loader": {
       preProcessor: "scss",
       patterns: [
-        path.resolve(__dirname, "./src/assets/_mixins.scss"),
-        path.resolve(__dirname, "./src/assets/_sizes.scss"),
-        path.resolve(__dirname, "./src/assets/_baseColors.scss"),
+        Path.resolve(__dirname, "./src/assets/_mixins.scss"),
+        Path.resolve(__dirname, "./src/assets/_sizes.scss"),
+        Path.resolve(__dirname, "./src/assets/_baseColors.scss"),
       ],
     },
+  },
+  chainWebpack: config => {
+    config
+      .plugin("webpack-provide")
+      .use(ProvidePlugin, [{
+        Buffer: ["buffer", "Buffer"],
+        process: "process/browser.js"
+      }])
+
   },
 };
